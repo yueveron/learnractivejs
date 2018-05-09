@@ -1,9 +1,16 @@
-﻿# learnractivejs
+﻿# Learning ractivejs
 在过往开发 Web Project 的过程中，发现数据绑定是如此的重要，之前的项目由于没有使用数据绑定，导致后期维护异常的困难，例如：新增一个输入字段，后台不得不做数据兼容；字段没有做对象属性标记，导致阅读异常的困难。鉴于以上如此不堪的开发维护经验，今后项目势必用上数据绑定。
 
 网上查阅发现 Angular、React、Vue 是最为普及的 MVVM 框架同时提供双向的数据绑定，但若使用这些框架，必须遵循框架自身严格的法则，编程的思维必须彻底地转换，开发也等于从零开始学，时间与脑力成本是巨大的。因此继续寻找，不经意间发现了 RactiveJS。
 
 RactiveJS 是一款轻量级的前端 MVVM（Model-View-ViewModel） 框架，它实现了模板，数据绑定，DOM实时更新，自定义组件，事件处理等功能。当前项目最需要解决的数据绑定及输入控件组件化功能，ractivjs 这两点都能满足。同时查阅官方入门教程，发现难度较低，对于毫无数据绑定框架使用经验的人来说，也可较轻易的上手。于是创建 Repository 开启学习与应用 ractivejs 之路。
+
+#### 目录
+* [基础知识](#creating-components---创建组件)
+* [数据绑定](#binding-data-数据绑定)
+* [响应事件](#handling-events-响应事件)
+* [自定义组件](#creating-components---创建组件)
+
 
 ### 基础知识
 #### Parallel DOM
@@ -18,8 +25,8 @@ https://yueveron.github.io/learnractivejs/demo/00.demo_helloworld.html
 ###### Example :: Create Ractive Object
 ```javascript
 createRactive : function(){
-	var self = this;
-	self.ractiveObj = new Ractive({
+  var self = this;
+  self.ractiveObj = new Ractive({
         //* el实质上是一个选择器，可以是#id,.class等等，同jQuery其实就是替换了el选择器对应元素的innerHTML
         el : '#module',
         //* template是模板对象，可以是 ajax 回调中的模板对象, 也可以是一段html代码，也可是定义在当前页上某个模板的id
@@ -54,14 +61,14 @@ Ractive 支持对象属性嵌套，使用 Mustaches Sections 语法实现，即�
 
 ```
 {
-	"item" : {
-		"country": {
-	      "name": "中国",
-	      "climate": { "temperature": "温暖", "rainfall": "较少" },
-	      "population": 63230000,
-	      "capital": { "name": "北京", "area": 8, "culture":{"bookstore":"三联书店","university":"北京大学"} }
-	    }
-	}
+  "item" : {
+    "country": {
+        "name": "中国",
+        "climate": { "temperature": "温暖", "rainfall": "较少" },
+        "population": 63230000,
+        "capital": { "name": "北京", "area": 8, "culture":{"bookstore":"三联书店","university":"北京大学"} }
+      }
+  }
 }
 ```
 ```
@@ -237,19 +244,19 @@ var ractive = new Ractive({
   template: '#template',
   el: '#container',
   data :{
-  	btnval : 1
+    btnval : 1
   }
 });   
 
 //* handle : on-submit
 ractive.on('submit', function(event) {
-	this.set('submitted', this.get('val'));
-	event.original.preventDefault();
+  this.set('submitted', this.get('val'));
+  event.original.preventDefault();
 });
 
 //* handle : on-click
 ractive.on('custom', function(event) {
-	console.log(this.get('btnval'))
+  console.log(this.get('btnval'))
 })
 ```
 
@@ -446,97 +453,97 @@ const ractive = new Ractive({
 
 ```javascript
 var testcaseComponent = {
-	dom : $('.dragula-container'),
-	ractiveObj : null,
-	observerCustomComponent : null,
-	init : function(){
-		var self = this;
-		self.ractiveObj = new Ractive({
-	        el : self.dom[0],
-	        template : '#template-use-component',
-	        //* 使用组件, 'customComponent'-template标记；'CustomComponent'-自定义组件名
-	        components :{ 
-	        	customComponent : CustomComponent
-	        },
-	        data : { 
-	        	"title" : "文字模块",
-	        	"customdata" : "yellow"
-	        },
-	        oncomplete:function(){
-	        },
-	        onteardown: function() {
-	            //* 销毁 ractive-instance，执行销毁 observe 监听事件
-	        	self.observerCustomComponent.cancel();
-	        }
-	    });
-	    //* 组件回调函数的实现，利用 observe 
-	    self.observerCustomComponent = self.ractiveObj.observe('customdata', function($newValue, $oldValue){
-    		console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
-    	})
-	}
+  dom : $('.dragula-container'),
+  ractiveObj : null,
+  observerCustomComponent : null,
+  init : function(){
+    var self = this;
+    self.ractiveObj = new Ractive({
+          el : self.dom[0],
+          template : '#template-use-component',
+          //* 使用组件, 'customComponent'-template标记；'CustomComponent'-自定义组件名
+          components :{ 
+            customComponent : CustomComponent
+          },
+          data : { 
+            "title" : "文字模块",
+            "customdata" : "yellow"
+          },
+          oncomplete:function(){
+          },
+          onteardown: function() {
+              //* 销毁 ractive-instance，执行销毁 observe 监听事件
+            self.observerCustomComponent.cancel();
+          }
+      });
+      //* 组件回调函数的实现，利用 observe 
+      self.observerCustomComponent = self.ractiveObj.observe('customdata', function($newValue, $oldValue){
+        console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
+      })
+  }
 }
 
 var CustomComponent = Ractive.extend({
-	template : `
-		<h4 class="title"></h4>
-		<div class="btn-group">
-			{{yield}}
-		</div>
-		<p><span></span> The select button is <span class="color-info"></span></p>
-		<div>
-			<a class="btn btn-getdata">Get Value</a>
-		</div>
-	`,
-	css : `
-		.btn{display:inline-block; cursor:pointer; border:1px solid #000; color:#000; padding:5px 8px; font-size:12px;}
-		.btn:hover{background-color:#0057ff;color:#ffffff;}
-		.btn.active{background-color:#0057ff; color:#ffffff;}
-	`,
-	data : {},
-	oninit : function(){
-		console.log(this.get('value'));
-		console.log(this.get('initdata'));
-	},
-	onrender : function(){
-		var self = this;
-		var domTitle = $(self.find('.title'));
-		domTitle.text(self.get('initdata'));
-		//
-		var domListBtn = $(self.findAll('.btn-color')); // .findAll() - belong to ractivejs api, $(ractive-dom)-  将 ractive-dom 转化为 jQ-dom
-		domListBtn.each(function(index, el) {
-			var btn = $(el);
-			btn.click(function(event) {
-				var value = $(this).attr('value');
-				self.set('value', value);
-				self.customfuncInfo(value);
-				self.customfuncStyleBtn(value);
-			});
-		});
-		//
-		var btnGetData = $(self.find('.btn-getdata'));
-		btnGetData.click(function(event) {
-			console.log(self.get('value'));
-		});
-		//
-		self.customfuncStyleBtn(self.get('value'));
-		self.customfuncInfo(self.get('value'))
-	},
-	//* 自定义方法
-	customfuncInfo : function($value){
-		var domInfo = $(this.find('.color-info'));
-		domInfo.text($value);
-	},
-	//* 自定义方法
-	customfuncStyleBtn : function($value){
-		var domListBtn = $(this.findAll('.btn-color'));
-		domListBtn.each(function(index, el) {
-			if($(el).attr('value') == $value){
-				$(el).addClass('active');
-			}else{
-				$(el).removeClass('active');
-			}
-		});
-	}
+  template : `
+    <h4 class="title"></h4>
+    <div class="btn-group">
+      {{yield}}
+    </div>
+    <p><span></span> The select button is <span class="color-info"></span></p>
+    <div>
+      <a class="btn btn-getdata">Get Value</a>
+    </div>
+  `,
+  css : `
+    .btn{display:inline-block; cursor:pointer; border:1px solid #000; color:#000; padding:5px 8px; font-size:12px;}
+    .btn:hover{background-color:#0057ff;color:#ffffff;}
+    .btn.active{background-color:#0057ff; color:#ffffff;}
+  `,
+  data : {},
+  oninit : function(){
+    console.log(this.get('value'));
+    console.log(this.get('initdata'));
+  },
+  onrender : function(){
+    var self = this;
+    var domTitle = $(self.find('.title'));
+    domTitle.text(self.get('initdata'));
+    //
+    var domListBtn = $(self.findAll('.btn-color')); // .findAll() - belong to ractivejs api, $(ractive-dom)-  将 ractive-dom 转化为 jQ-dom
+    domListBtn.each(function(index, el) {
+      var btn = $(el);
+      btn.click(function(event) {
+        var value = $(this).attr('value');
+        self.set('value', value);
+        self.customfuncInfo(value);
+        self.customfuncStyleBtn(value);
+      });
+    });
+    //
+    var btnGetData = $(self.find('.btn-getdata'));
+    btnGetData.click(function(event) {
+      console.log(self.get('value'));
+    });
+    //
+    self.customfuncStyleBtn(self.get('value'));
+    self.customfuncInfo(self.get('value'))
+  },
+  //* 自定义方法
+  customfuncInfo : function($value){
+    var domInfo = $(this.find('.color-info'));
+    domInfo.text($value);
+  },
+  //* 自定义方法
+  customfuncStyleBtn : function($value){
+    var domListBtn = $(this.findAll('.btn-color'));
+    domListBtn.each(function(index, el) {
+      if($(el).attr('value') == $value){
+        $(el).addClass('active');
+      }else{
+        $(el).removeClass('active');
+      }
+    });
+  }
 })
 ```
 ###### Demo Custom Component
@@ -548,10 +555,10 @@ https://yueveron.github.io/learnractivejs/demo/component/test-case_component-cus
 ##### findAllComponents
 Returns all components inside a given Ractive instance with the given name
 ```
-var cu = this.findAllComponents('customComponent');	
+var cu = this.findAllComponents('customComponent'); 
 cu.forEach(function(c) {
     c.destroy();
-})	 
+})   
 ```
 
 ##### findComponent
@@ -585,7 +592,7 @@ Observes the data at a particular keypath.借助 obeserve 实现自定义组件�
 
 ```
 var observerCustomComponent = ractiveObj.observe('customdata', function($newValue, $oldValue){
-	console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
+  console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
 })
 ```
 销毁 ractive-instance 的时候，记住在 onteardown() 中取消 observe
@@ -596,8 +603,6 @@ onteardown: function() {
 }
 ```
 
----
-
 #### 自定义组件常用方法
 ractivejs 支持在组件代码内创建任意自定义的方法，并提供在父层实例中调用。
 
@@ -607,21 +612,21 @@ ractivejs 支持在组件代码内创建任意自定义的方法，并提供在�
 ###### ractive-instance
 ```
 onteardown: function() {
-	//* get all componentueditor, and use it's destroy()
-	var cu = this.findAllComponents('componentueditor');	
-	cu.forEach(function(c) {
-	    c.destroy();
-	})	        	
+  //* get all componentueditor, and use it's destroy()
+  var cu = this.findAllComponents('componentueditor');  
+  cu.forEach(function(c) {
+      c.destroy();
+  })            
 }
 ```
 ###### UeditorComponent
 
 ```
 destroy : function(){
-	var self = this;
-	if(self.ueditorObj!= null){
-		self.ueditorObj.destroy();			
-	}
+  var self = this;
+  if(self.ueditorObj!= null){
+    self.ueditorObj.destroy();      
+  }
 }
 ```
 
