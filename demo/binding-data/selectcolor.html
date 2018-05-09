@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang='en-GB'>
+<head>
+  <meta charset='utf-8'>
+  <title>Beginning Ractive: Handling Form Elements</title>
+  <link rel='stylesheet' href='css/dropdown.css'>
+</head>
+<body>
+  <div id="container"></div>
+
+  <script id="template" type="text/ractive">
+    <select value='{{color}}'>
+    {{#each colors}}
+      <option>{{this}}</option>
+    {{/each}}
+    </select>
+    <p>The selected colour is <span style='color: {{color}};'>{{color}}</span>. </p>
+  </script>
+
+  <script src='js/ractive.min.js'></script>
+  <script src="js/selectcolor.js"></script>
+</body>
+</html>

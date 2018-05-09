@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>MVC Template Page</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<style type="text/css">
+    .sections-container-wrapper{width: 800px; margin: 0 auto;}
+    .sections-container{margin-bottom: 30px;}
+    .section-wrapper{margin-bottom: 10px; padding: 5px; position: relative; margin-left: -200px;}
+    .section-wrapper .buttons{
+        width: 200px; text-align: right; float: left;
+    }
+    .section-wrapper .section{min-height: 40px; float: right; background-color: #eee; width: calc(100% - 200px); }
+    .section-wrapper .item{min-height: 25px;}
+    .section-wrapper .item-wrapper{ margin: 5px; background-color: #fff; position: relative; }
+    .section-wrapper .item-buttons{ position: absolute; top: 0; right: 0; }
+
+    .btn-default{background-color: #0057ff; color: #fff; font-size: 14px; padding: 6px 12px;  cursor: pointer; display: inline-block;}
+    .btn-default:hover{color: #fff;}
+    .btn-default.p1{background-color: #2C2C2C; font-size: 10px; padding: 3px 6px;}
+    .btn-default.p2{background-color: #009CFF; font-size: 10px; padding: 3px 6px;}
+
+    .row{margin: 5px 0 15px;}
+    .margin-bottom-v1{margin-bottom: 5px;}
+    textarea{width: 100%;}
+    h3{margin-bottom: 5px;}
+    .hide{display: none!important;}
+
+    .gu-mirror{
+        position: absolute;
+        width:88px!important;
+        height:54px;
+        border:1px dashed #555;
+        margin-left:-100px!important;
+        cursor:move
+    }    
+
+    /* check box :: start */
+    label.checkbox {
+        display: inline-block;
+        position: relative;
+        padding-left: 22px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    label.checkbox input {
+        display: none;
+    }
+
+    span.checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 16px;
+        width: 16px;
+        background-color: #fff;
+        border: 1px solid #4b4b4b;
+    }
+
+    span.checktext{font-size: 15px; line-height: 1.0;}
+
+    label.checkbox input:checked ~ span.checkmark {
+        background:url(images/checkbox-check.png) no-repeat;
+        background-position: center;
+        background-size: 10px 10px;
+    }
+    /* check box :: end */
+
+    /* check box :: start */
+    label.radio input{display: none;}
+    label.radio span.radiomark{display: inline-block; vertical-align: middle; width: 15px; height: 15px; border: 1px solid #000; cursor: pointer; margin-right:5px;}
+    label.radio input:checked ~ span.radiomark {border: 1px solid #ff0000;}
+    label.radio span.radiomark-al{background-image: url(images/radiobutton.png); background-repeat: no-repeat; width: 18px; height: 18px; border:0;}
+    label.radio input:checked ~ span.radiomark-al{border:0;}
+    label.radio span.radiomark-al.left{ background-position:-48px -10px;}
+    label.radio span.radiomark-al.center{ background-position:-86px -10px;}
+    label.radio span.radiomark-al.right{ background-position:-10px -10px;}
+    label.radio span.radiomark-al.left:hover, label.radio input:checked ~ span.radiomark-al.left{background-position:-48px -46px;}
+    label.radio span.radiomark-al.center:hover, label.radio input:checked ~ span.radiomark-al.center{ background-position:-86px -46px;}
+    label.radio span.radiomark-al.right:hover, label.radio input:checked ~ span.radiomark-al.right{ background-position:-10px -46px;}
+    /* check box :: end */
+
+    .collapse{display: none;}
+    .collapse.open{display: block;}
+
+    /* modal */
+    .modal {position: fixed; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; z-index: 1050; display: none; overflow: hidden; -webkit-overflow-scrolling: touch; outline: 0; }
+    .modal-backdrop {position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1040; background-color: #000; opacity: .5; display: none; }
+
+</style>
+<body>
+<!-- Loading -->
+<div id="prjloading-wrap" class="prj-loading-wrap">
+    <div class="table-box">
+        <div class="table-cell">
+            <div class="box-loading-icon"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Main -->
+<div>       
+    <div class="sidebar-container" id="sidebar-container">
+        <!-- 左侧菜单 -->       
+    </div>
+
+    <!-- <div class="gu-mirror" style="width: 656px; height: 54px; left: 300px; top: 150px;"></div> -->
+
+    <div class="workplace-container" id="workpalce-container">
+        <div class="container" style="width: 1030px; margin: 0 auto;">
+            <div class="main-content" style="background-color: #fff; height: 100%; margin-left: 16.66666667%; width: 66.66666667%; padding: 15px;">
+                <!-- 主编辑区域 Start -->
+                <div class="sections-container-wrapper" style="width: 100%;">
+                    <div class="sections-container">
+                        <div class="dragula-container">
+                            
+                        </div>
+                        
+                        <div class="sections-add-bar last" style="margin-top: 30px;">
+                            <div class="btn-container">
+                                <a class="btn btn-default btn-getData-prj">Get Data</a>
+                                <a class="btn btn-default btn-sortUeditor">Sort Ueditor</a>
+                                <a class="btn btn-default btn-destroy-prj">Destroy Ractive</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+    
+<!-- Libraries -->
+<script src="js/tools/external/require.js"></script>
+
+<script>
+//* Ueditor 相对目录
+window.UEDITOR_HOME_URL = "js/tools/external/ueditor/";    
+var page = {
+    init : function(){
+        requirejs.config({
+            baseUrl : 'js/',
+            map: {
+                '*': {
+                    'css': 'tools/external/require/css.min'
+                }
+            },
+            paths: {
+                "domReady" : "tools/external/require/domReady",
+                "jQuery" : "tools/external/jquery-3.3.1",          
+                "ractive" : "tools/external/ractive",
+                "ueditor" : "tools/external/ueditor/ueditor.all.min",
+                "ueditor_cn" : "tools/external/ueditor/lang/zh-cn/zh-cn",
+                "ueditor_config" : "tools/external/ueditor/ueditor.config",
+                "ueditor_zeroclipboard" : "tools/external/ueditor/third-party/zeroclipboard/ZeroClipboard.min",
+                "globalRactiveComponent" : "global-ractive-component",
+                "prjMain" : "testcase_component"
+            },
+            shim:{
+                'ueditor': {  
+                    deps: ["ueditor_zeroclipboard", "ueditor_config", 'css!tools/external/ueditor/themes/default/css/ueditor.css'],
+                    init: function ($ZeroClipboard) {
+                        window.ZeroClipboard = $ZeroClipboard;  //导出到全局变量，供ueditor使用
+                    }
+                },
+                'ueditor_cn':{  
+                    deps: ['ueditor']
+                }
+            }    
+        });
+        //
+        window.onload = function(){
+            page.onRequire();
+        }                   
+    },
+
+    onRequire : function(){
+        requirejs(["domReady", "jQuery","globalRactiveComponent"], function(domReady) { 
+            domReady(function(){
+                page.winLoadComplete();
+            });
+        }); 
+    },
+
+    winLoadComplete : function(){
+        requirejs(['prjMain'], function($app){
+            $app.init();
+            page.removeLoadAnim();
+        });        
+    },          
+    
+    // remove : loading element
+    removeLoadAnim : function(){
+        $('#prjloading-wrap').remove();
+    }
+}
+
+// 
+page.init();
+</script>
+
+<script id="template-use-component" type="text/ractive">
+    <div class="section" data-type={{type}}>
+        <p>{{title}}</p>
+
+        <div class="row">
+            <customComponent value={{customdata}} initdata="Custom Component Demo"></customComponent>
+        </div>
+
+        <div class="row">
+            <h3>Image Radio Button</h3>
+            <fieldset>
+                <label class="radio">
+                    <input type='radio' name='{{align}}' value='left'>
+                    <span class="radiomark radiomark-al left"></span>
+                </label>
+                <label class="radio">
+                    <input type='radio' name='{{align}}' value='center'>
+                    <span class="radiomark radiomark-al center"></span>
+                </label>
+                <label class="radio">
+                    <input type='radio' name='{{align}}' value='right'>
+                    <span class="radiomark radiomark-al right"></span>
+                </label>
+            </fieldset>
+            <p>The selected Align is {{align}}.</p>
+        </div>
+
+        <div class="row">
+            <h3>Ueditor</h3>
+            <div class="row top">
+                <componentueditor value={{detail}} maxlength='50'></componentueditor>
+            </div>
+            <div class="row bottom">
+                <componentueditor value={{detail2}} ></componentueditor>
+            </div>    
+        </div>
+
+        <div class="row">
+            <h3>Custom CheckBox Button</h3>
+            <label class="checkbox">
+                <input type="checkbox" checked='{{isShowComment}}'>
+                <span class="checkmark"></span>
+                <span class="checktext">添加评论组件</span>
+            </label>
+            <div class="collapse {{formatClassName(isShowComment)}}">
+                Comment Content
+            </div>
+        </div>
+
+        <div class="row">
+            <h3>Dropdown Menu</h3>
+            <dropdown value={{selected}}>
+                <ol style="width: 200px; background-color: #eee;">
+                    <li value="001">One</li>
+                    <li value="002">Two</li>
+                    <li value="003">Three</li>
+                </ol>
+            </dropdown>
+            <p>The selected Item is {{selected}}.</p>
+        </div>
+
+        <div class="row">
+            <h3>Dropdown Menu2</h3>
+            <dropdown value={{selected2}}>
+                <ol style="width: 200px; background-color: #eee;">
+                    <li value="001">One</li>
+                    <li value="002">Two</li>
+                    <li value="003">Three</li>
+                </ol>
+            </dropdown>
+            <p>The selected Item is {{selected2}}.</p>
+        </div>
+
+        <div class="row">
+            <h3>Radio Button</h3>
+            <fieldset>
+                <label><input type='radio' name='{{color}}' value='red'> red</label>
+                <label><input type='radio' name='{{color}}' value='green'> green</label>
+                <label><input type='radio' name='{{color}}' value='blue'> blue</label>
+                <p>The selected colour is <span style='color: {{color}};'>{{color}}</span>.</p>
+            </fieldset>
+        </div>
+        <div class="row">
+            <h3>CheckBox Button</h3>
+            <label>
+                <input type='checkbox' checked='{{checked1}}'>
+                {{#if checked1}}checked!{{else}}not checked{{/if}}
+            </label>
+        </div>
+        <div class="row">
+            <h3>DropDown Menu</h3>
+            <select value='{{bgcolor}}'>
+                <option>red</option>
+                <option>green</option>
+                <option>blue</option>
+            </select>
+            <p>The selected colour is <span style='color: {{bgcolor}};'>{{bgcolor}}</span>.</p>
+        </div>
+
+        <div class="row">
+            <componentlink list={{link}}></componentlink>
+        </div>
+    </div>
+</script>
+
+<script id="template-modal-link" type="text/ractive">
+    <div class="modal-content" id="modal-link" style="width: 520px; margin: 0 auto; background-color: #f2f4f9;">
+        <div class="modal-header" style="text-align: right;"><a class="btn btn-default p1 btn-close">close</a></div>
+        <div class="modal-body"><input type="text" value={{url}} style="width: 100%;"></div>
+        <div class="modal-footer"><a class="btn btn-default btn-confirm">确定</a></div>
+    </div>    
+</script>
+
+</body>
+</html>
