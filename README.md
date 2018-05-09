@@ -42,7 +42,7 @@ data: { name: '<b>world</b>' }
 <p>Hello, {{{name}}}!</p>
 ```
 
-###### Example :: Get Data ，_注意 clone or pure-data_
+###### Example :: Get Data ，*注意 clone or pure-data*
 
 ```
 self.ractiveObj.get()
