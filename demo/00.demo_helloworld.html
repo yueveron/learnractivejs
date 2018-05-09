@@ -26,10 +26,15 @@ $(function() {
     var ractive = new  Ractive({
     	target : '#target',				
     	template : '#template',
-    	data : {greeting: 'Hello', name:'world'}
+        //* Init Set Keypath
+    	data : {greeting: 'Hello', name:'world'},
+        onrender : function(){
+            console.log(this.get('greeting'));
+            console.log(this.get('name'));
+        }
     });
 
-    ractive.set('greeting', '你好');
+    //* Manual Set Keypath
     ractive.set({
     	'greeting' : '早啊',
     	'name' : '星星'
