@@ -15,6 +15,12 @@ RactiveJS 使用 Mustache 语法， Mustache（https://mustache.github.io/#demo�
 ###### Demo Basic
 https://yueveron.github.io/learnractivejs/demo/00.demo_helloworld.html
 
+###### Demo Nested Properties - 属性嵌套
+https://yueveron.github.io/learnractivejs/demo/01.demo_NestedProperties.html
+
+###### Demo Expressions - 表达式
+https://yueveron.github.io/learnractivejs/demo/02.demo_Expressions.html
+
 ---
 
 ### Binding Data 数据绑定
