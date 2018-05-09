@@ -11,6 +11,7 @@ RactiveJS 是一款轻量级的前端 MVVM（Model-View-ViewModel） 框架，�
 * [响应事件](#handling-events-响应事件)
 * [自定义组件](#creating-components---创建组件)
 
+<a href="http://example.com/" target="_blank">Hello, world!</a>
 
 ### 基础知识
 #### Parallel DOM
