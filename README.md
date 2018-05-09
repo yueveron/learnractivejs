@@ -15,6 +15,40 @@ RactiveJS 使用 Mustache 语法， Mustache（https://mustache.github.io/#demo�
 ###### Demo Basic
 https://yueveron.github.io/learnractivejs/demo/00.demo_helloworld.html
 
+###### Example :: Create Ractive Object
+```
+createRactive : function(){
+	var self = this;
+	self.ractiveObj = new Ractive({
+        //* el实质上是一个选择器，可以是#id,.class等等，同jQuery其实就是替换了el选择器对应元素的innerHTML
+        el : '#module',
+        //* template是模板对象，可以是 ajax 回调中的模板对象, 也可以是一段html代码，也可是定义在当前页上某个模板的id
+        template : '#template-baisc',
+        //* data就是要放到模板中的数据，是一个json对象，value可以是方法
+        data : { greeting: 'Hello', name: 'world'},
+        //oncomplete : 模板渲染完毕执行的回调函数, 如果要动态给模板中的DOM绑定一些动态jQuery事件, 建议写在这里
+        oncomplete:function(){
+        }
+    });
+}
+```
+
+###### Example :: 转义标记
+
+```
+data: { name: '<b>world</b>' }
+
+//* 使用 {{{keypath}}}!
+<p>Hello, {{{name}}}!</p>
+```
+
+###### Example :: Get Data ，==注意 clone or pure-data==
+
+```
+self.ractiveObj.get()
+self.get('list',{virtual : true});  //* .get({virtual:true}) - get pure-data, not shadow-clone
+```
+
 ###### Demo Nested Properties - 属性嵌套
 https://yueveron.github.io/learnractivejs/demo/01.demo_NestedProperties.html
 
