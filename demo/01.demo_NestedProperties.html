@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="format-detection" content="telephone=no">
+    <title>RactiveJS</title>
+    <link rel="stylesheet" href="assets/css/basic_global.css">
+</head>
+
+<body>
+<div id="target"></div>
+<script id="template" type="text/ractive">
+	<h2>Country profile</h2>
+    
+    <p>{{country.name}} is a {{country.climate.temperature}} country with {{country.climate.rainfall}} rainfall and a population of {{country.population}}.</p>
+    
+    <p>The capital city is {{country.capital.name}} (<a href='https://www.google.com/maps/place/{{country.capital.name}}/@{{country.capital.lat}},{{country.capital.lon}},12z' target='_blank'>see map</a>).</p>
+</script>
+
+<script src="assets/js/jquery-1.10.2.min.js"></script>
+<script src="assets/js/ractive.js"></script>
+
+<script type="text/javascript">
+$(function() {
+    console.log('ready');
+    var ractive = new  Ractive({
+    	target : '#target',				
+    	template : '#template',
+    	data : {
+            country: {
+                name: 'The UK',
+                climate: { temperature: 'cold', rainfall: 'excessive' },
+                population: 63230000,
+                capital: { name: 'London', lat: 51.5171, lon: -0.1062 }
+            }     
+        }
+    });
+
+    var country = ractive.get('country');
+    country.climate.rainfall = 'very high';
+    ractive.update('country');
+});
+</script>
+
+</body>
+</html>
