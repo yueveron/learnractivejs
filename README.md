@@ -1,4 +1,4 @@
-# Learning ractivejs
+﻿# Learning ractivejs
 在过往开发 Web Project 的过程中，发现数据绑定是如此的重要，之前的项目由于没有使用数据绑定，导致后期维护异常的困难，例如：新增一个输入字段，后台不得不做数据兼容；字段没有做对象属性标记，导致阅读异常的困难。鉴于以上如此不堪的开发维护经验，今后项目势必用上数据绑定。
 
 网上查阅发现 Angular、React、Vue 是最为普及的 MVVM 框架同时提供双向的数据绑定，但若使用这些框架，必须遵循框架自身严格的法则，编程的思维必须彻底地转换，开发也等于从零开始学，时间与脑力成本是巨大的。因此继续寻找，不经意间发现了 RactiveJS。
@@ -10,7 +10,7 @@ RactiveJS 是一款轻量级的前端 MVVM（Model-View-ViewModel） 框架，�
 * [数据绑定](#binding-data-数据绑定)
 * [响应事件](#handling-events-响应事件)
 * [自定义组件](#creating-components---创建组件)
-* [构建页面](#Create-basci-page---构建页面)
+* [构建页面](#create-basci-page---构建页面)
 
 
 ### 基础知识
