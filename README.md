@@ -10,6 +10,8 @@ RactiveJS 是一款轻量级的前端 MVVM（Model-View-ViewModel） 框架，�
 * [数据绑定](#binding-data-数据绑定)
 * [响应事件](#handling-events-响应事件)
 * [自定义组件](#creating-components---创建组件)
+* [构建页面](#Create-basci-page---构建页面)
+
 
 ### 基础知识
 #### Parallel DOM
@@ -24,8 +26,8 @@ https://yueveron.github.io/learnractivejs/demo/00.demo_helloworld.html
 ###### Example :: Create Ractive Object
 ```javascript
 createRactive : function(){
-  var self = this;
-  self.ractiveObj = new Ractive({
+	var self = this;
+	self.ractiveObj = new Ractive({
         //* el实质上是一个选择器，可以是#id,.class等等，同jQuery其实就是替换了el选择器对应元素的innerHTML
         el : '#module',
         //* template是模板对象，可以是 ajax 回调中的模板对象, 也可以是一段html代码，也可是定义在当前页上某个模板的id
@@ -60,14 +62,14 @@ Ractive 支持对象属性嵌套，使用 Mustaches Sections 语法实现，即�
 
 ```
 {
-  "item" : {
-    "country": {
-        "name": "中国",
-        "climate": { "temperature": "温暖", "rainfall": "较少" },
-        "population": 63230000,
-        "capital": { "name": "北京", "area": 8, "culture":{"bookstore":"三联书店","university":"北京大学"} }
-      }
-  }
+	"item" : {
+		"country": {
+	      "name": "中国",
+	      "climate": { "temperature": "温暖", "rainfall": "较少" },
+	      "population": 63230000,
+	      "capital": { "name": "北京", "area": 8, "culture":{"bookstore":"三联书店","university":"北京大学"} }
+	    }
+	}
 }
 ```
 ```
@@ -243,19 +245,19 @@ var ractive = new Ractive({
   template: '#template',
   el: '#container',
   data :{
-    btnval : 1
+  	btnval : 1
   }
 });   
 
 //* handle : on-submit
 ractive.on('submit', function(event) {
-  this.set('submitted', this.get('val'));
-  event.original.preventDefault();
+	this.set('submitted', this.get('val'));
+	event.original.preventDefault();
 });
 
 //* handle : on-click
 ractive.on('custom', function(event) {
-  console.log(this.get('btnval'))
+	console.log(this.get('btnval'))
 })
 ```
 
@@ -452,112 +454,145 @@ const ractive = new Ractive({
 
 ```javascript
 var testcaseComponent = {
-  dom : $('.dragula-container'),
-  ractiveObj : null,
-  observerCustomComponent : null,
-  init : function(){
-    var self = this;
-    self.ractiveObj = new Ractive({
-          el : self.dom[0],
-          template : '#template-use-component',
-          //* 使用组件, 'customComponent'-template标记；'CustomComponent'-自定义组件名
-          components :{ 
-            customComponent : CustomComponent
-          },
-          data : { 
-            "title" : "文字模块",
-            "customdata" : "yellow"
-          },
-          oncomplete:function(){
-          },
-          onteardown: function() {
-              //* 销毁 ractive-instance，执行销毁 observe 监听事件
-            self.observerCustomComponent.cancel();
-          }
-      });
-      //* 组件回调函数的实现，利用 observe 
-      self.observerCustomComponent = self.ractiveObj.observe('customdata', function($newValue, $oldValue){
-        console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
-      })
-  }
+	dom : $('.dragula-container'),
+	ractiveObj : null,
+	observerCustomComponent : null,
+	init : function(){
+		var self = this;
+		self.ractiveObj = new Ractive({
+	        el : self.dom[0],
+	        template : '#template-use-component',
+	        //* 使用组件, 'customComponent'-template标记；'CustomComponent'-自定义组件名
+	        components :{ 
+	        	customComponent : CustomComponent
+	        },
+	        data : { 
+	        	"title" : "文字模块",
+	        	"customdata" : "yellow"
+	        },
+	        oncomplete:function(){
+	        },
+	        onteardown: function() {
+	            //* 销毁 ractive-instance，执行销毁 observe 监听事件
+	        	self.observerCustomComponent.cancel();
+	        }
+	    });
+	    //* 组件回调函数的实现，利用 observe 
+	    self.observerCustomComponent = self.ractiveObj.observe('customdata', function($newValue, $oldValue){
+    		console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
+    	})
+	}
 }
 
 var CustomComponent = Ractive.extend({
-  template : `
-    <h4 class="title"></h4>
-    <div class="btn-group">
-      {{yield}}
-    </div>
-    <p><span></span> The select button is <span class="color-info"></span></p>
-    <div>
-      <a class="btn btn-getdata">Get Value</a>
-    </div>
-  `,
-  css : `
-    .btn{display:inline-block; cursor:pointer; border:1px solid #000; color:#000; padding:5px 8px; font-size:12px;}
-    .btn:hover{background-color:#0057ff;color:#ffffff;}
-    .btn.active{background-color:#0057ff; color:#ffffff;}
-  `,
-  data : {},
-  oninit : function(){
-    console.log(this.get('value'));
-    console.log(this.get('initdata'));
-  },
-  onrender : function(){
-    var self = this;
-    var domTitle = $(self.find('.title'));
-    domTitle.text(self.get('initdata'));
-    //
-    var domListBtn = $(self.findAll('.btn-color')); // .findAll() - belong to ractivejs api, $(ractive-dom)-  将 ractive-dom 转化为 jQ-dom
-    domListBtn.each(function(index, el) {
-      var btn = $(el);
-      btn.click(function(event) {
-        var value = $(this).attr('value');
-        self.set('value', value);
-        self.customfuncInfo(value);
-        self.customfuncStyleBtn(value);
-      });
-    });
-    //
-    var btnGetData = $(self.find('.btn-getdata'));
-    btnGetData.click(function(event) {
-      console.log(self.get('value'));
-    });
-    //
-    self.customfuncStyleBtn(self.get('value'));
-    self.customfuncInfo(self.get('value'))
-  },
-  //* 自定义方法
-  customfuncInfo : function($value){
-    var domInfo = $(this.find('.color-info'));
-    domInfo.text($value);
-  },
-  //* 自定义方法
-  customfuncStyleBtn : function($value){
-    var domListBtn = $(this.findAll('.btn-color'));
-    domListBtn.each(function(index, el) {
-      if($(el).attr('value') == $value){
-        $(el).addClass('active');
-      }else{
-        $(el).removeClass('active');
-      }
-    });
-  }
+	template : `
+		<h4 class="title"></h4>
+		<div class="btn-group">
+			{{yield}}
+		</div>
+		<p><span></span> The select button is <span class="color-info"></span></p>
+		<div>
+			<a class="btn btn-getdata">Get Value</a>
+		</div>
+	`,
+	css : `
+		.btn{display:inline-block; cursor:pointer; border:1px solid #000; color:#000; padding:5px 8px; font-size:12px;}
+		.btn:hover{background-color:#0057ff;color:#ffffff;}
+		.btn.active{background-color:#0057ff; color:#ffffff;}
+	`,
+	data : {},
+	oninit : function(){
+		console.log(this.get('value'));
+		console.log(this.get('initdata'));
+	},
+	onrender : function(){
+		var self = this;
+		var domTitle = $(self.find('.title'));
+		domTitle.text(self.get('initdata'));
+		//
+		var domListBtn = $(self.findAll('.btn-color')); // .findAll() - belong to ractivejs api, $(ractive-dom)-  将 ractive-dom 转化为 jQ-dom
+		domListBtn.each(function(index, el) {
+			var btn = $(el);
+			btn.click(function(event) {
+				var value = $(this).attr('value');
+				self.set('value', value);
+				self.customfuncInfo(value);
+				self.customfuncStyleBtn(value);
+			});
+		});
+		//
+		var btnGetData = $(self.find('.btn-getdata'));
+		btnGetData.click(function(event) {
+			console.log(self.get('value'));
+		});
+		//
+		self.customfuncStyleBtn(self.get('value'));
+		self.customfuncInfo(self.get('value'))
+	},
+	//* 自定义方法
+	customfuncInfo : function($value){
+		var domInfo = $(this.find('.color-info'));
+		domInfo.text($value);
+	},
+	//* 自定义方法
+	customfuncStyleBtn : function($value){
+		var domListBtn = $(this.findAll('.btn-color'));
+		domListBtn.each(function(index, el) {
+			if($(el).attr('value') == $value){
+				$(el).addClass('active');
+			}else{
+				$(el).removeClass('active');
+			}
+		});
+	}
 })
 ```
 ###### Demo Custom Component
 https://yueveron.github.io/learnractivejs/demo/component/test-case_component-customdemo.html
 
+#### 组件嵌套及事件传递
+
+```javasctipt
+//子层组件
+const Child = Ractive.extend({
+  template: '<span></span>',
+  oncomplete(){
+    this.fire('childevt'); 
+  }
+});
+
+//父层组件
+const Parent = Ractive.extend({
+  components: { Child },
+  template: '<Child />',
+  onrender: function() {
+      this.on('Child.childevt', function(){
+      //return false;  //* 如果想阻止事件传递给顶层(stopPropagation)，则 return false
+    });  
+  }
+});
+
+//顶层实例
+const instance = Ractive({
+  target: "body",
+  components: { Parent },
+  template: '<Parent />'
+});
+
+instance.on('Child.childevt', function(){
+  console.log('Hello World!');
+});
+```
 
 #### Ractivejs Component 自带常用方法
 
 ##### findAllComponents
 Returns all components inside a given Ractive instance with the given name
 ```
-var cu = this.findAllComponents('customComponent'); 
+var cu = this.findAllComponents('customComponent');	
 cu.forEach(function(c) {
     c.destroy();
-})   
+})	 
 ```
 
 ##### findComponent
@@ -580,9 +615,10 @@ A lifecycle event that is called when the instance is rendered and ==all the tra
 
 ##### onteardown
 A lifecycle event that is called when the instance is being torn down.
+父层 ractive-instance.teardown(), 包括父层及组件的 onteardown() 都会被触发，所以组件内的销毁方法不需要单独写 destroy()，只需要写 onteardown() 即可。
 
 ```
-// call ractive-instance.teardown() will fire onteardown()
+// call ractive-instance.teardown() will fire onteardown(), include sefl-instance and component-instance.
 ractiveObj.teardown();
 ```
 
@@ -591,7 +627,7 @@ Observes the data at a particular keypath.借助 obeserve 实现自定义组件�
 
 ```
 var observerCustomComponent = ractiveObj.observe('customdata', function($newValue, $oldValue){
-  console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
+	console.log('callback - observe :: customdata, newValue:' + $newValue + ' oldValue:' + $oldValue);
 })
 ```
 销毁 ractive-instance 的时候，记住在 onteardown() 中取消 observe
@@ -602,32 +638,8 @@ onteardown: function() {
 }
 ```
 
-#### 自定义组件常用方法
+#### 组件自定义方法
 ractivejs 支持在组件代码内创建任意自定义的方法，并提供在父层实例中调用。
-
-##### destroy 方法
-用于销毁自定义组件内创建的实例，例如：销毁 ueditor-instance.
-
-###### ractive-instance
-```
-onteardown: function() {
-  //* get all componentueditor, and use it's destroy()
-  var cu = this.findAllComponents('componentueditor');  
-  cu.forEach(function(c) {
-      c.destroy();
-  })            
-}
-```
-###### UeditorComponent
-
-```
-destroy : function(){
-  var self = this;
-  if(self.ueditorObj!= null){
-    self.ueditorObj.destroy();      
-  }
-}
-```
 
 ### 自定义组件范例
 ##### Demo : Ractivejs jQuery DateTimepicker
@@ -638,5 +650,39 @@ https://yueveron.github.io/learnractivejs/demo/component/test-case_component.htm
 
 ##### Demo : Ractivejs Pure DropDownMenu
 https://github.com/alexserver/ractive-dropdown
+
+---
+
+### Create basci page - 构建页面
+通过例子学习如何使用 Ractive 完成一个纯展示类型的页面。
+
+#### 原理：
+首先页面分离为 model-数据 和 view-视图，然后将数据(data)绑定到视图(template)，Ractive会完成数据绑定及渲染的工作，页面即可呈现。
+
+#### 关键：按组件组织页面
+页面按展示区域划分，对于可以复用的区域规划为组件，然后在父层 ractive-instance 内嵌入组件，实现 “区域化 + 组件化” 搭建整体页面。
+
+###### template 划分
+
+```javascript
+/* template : main */
+var website = `
+  <header>    
+  </header>
+  
+  <section id="highlights">    
+  </section>
+
+  <section id="categories">
+  </section>
+
+  <APPublish />      //component - 固定复用
+  <APSubscribe />    //component - 固定复用
+  <APFooter />       //component - 固定复用
+`;
+```
+
+###### Demo : BookStore Web Page
+https://yueveron.github.io/learnractivejs/demo/bookstorepage/index.html
 
 ---

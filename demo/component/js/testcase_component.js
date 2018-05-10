@@ -46,11 +46,6 @@ define(["ractive","ueditor"], function(Ractive) {
 		        	self.observerDropDown.cancel();
 		        	self.observerRadioAlign.cancel();
 		        	self.observerCustomComponent.cancel();
-		        	//* destroy ueditor
-		        	var cu = this.findAllComponents('componentueditor');	
-					cu.forEach(function(c) {
-					    c.destroy();
-					})	        	
 		        },
 		        /**
 		         * Set Ueditor Content to Ractive.keypath, use in : save project data
@@ -198,17 +193,17 @@ define(["ractive","ueditor"], function(Ractive) {
 			var self = this;
 			// console.log(self.get('maxlength'));
 		},
-		destroy : function(){
-			var self = this;
-			if(self.ueditorObj!= null){
-				self.ueditorObj.destroy();			
-			}
-		},
 		oncomplete:function(){
 			var self = this;
 			domTextArea = $(self.find('.input-textarea'));
 			self.ueditorObj = self.newUeditor(domTextArea, self.get('value'), self.get('maxlength'));			
         },
+        onteardown : function(){
+			var self = this;
+			if(self.ueditorObj!= null){
+				self.ueditorObj.destroy();			
+			}
+		},
         newUeditor : function($element, $value, $maxWords){
 			var editor;	
 			if($maxWords){

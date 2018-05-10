@@ -17,12 +17,7 @@ define(["ractive","dateTimePicker"], function(Ractive) {
 		        },
 		        oncomplete:function(){
 		        },
-		        onteardown: function() {
-		        	//* destroy datetimepicker
-		        	var cu = this.findAllComponents('datePickerComponent');	
-					cu.forEach(function(c) {
-					    c.destroy();
-					})	  
+		        onteardown: function() {		        	
 		        }
 		    });
 		    
@@ -78,7 +73,8 @@ define(["ractive","dateTimePicker"], function(Ractive) {
 				console.log(self.get('value'));
 			});
 		},
-		destroy : function(){
+		onteardown : function(){
+			// console.log('datePickerComponent :: teardown')
 			var self = this;
 			self.customDom.datetimepicker('destroy');
 		}

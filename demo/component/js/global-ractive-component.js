@@ -11,7 +11,7 @@ define(['ractive', 'ModalLink'], function(Ractive, ModalLink) {
 		   <button on-click="getData" class="btn-getData">get data</button>
 		   `,
 		data: {},
-		oninit :function(){
+		onrender :function(){
 			var self = this;
 			//* this - refer to component-wrapper
 			self.on('getData', function(event) {
