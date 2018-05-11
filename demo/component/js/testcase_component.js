@@ -14,10 +14,13 @@ define(["ractive","ueditor"], function(Ractive) {
 		        components :{ 
 		        	dropdown: DropdownComponent,
 		        	componentueditor : UeditorComponent,
-		        	customComponent : CustomComponent
+		        	customComponent : CustomComponent,
+		        	textinput : TextInputComponent
 		        },
 		        data : { 
 		        	"title" : "文字模块",
+		        	"inputtext" : "单行文本内容",
+		        	"inputtext1" : "百年孤寂",
 		        	"detail" : "文字详情",
 		        	"detail2" : "文字详情222",
 		        	"isShowComment" : false,
@@ -37,7 +40,7 @@ define(["ractive","ueditor"], function(Ractive) {
 		        		return '';
 		        	}
 		        },
-		        oncomplete:function(){
+		        onrender:function(){
 		        	var cs = this.findComponent('dropdown'); //* find component by name, return ractive instance
 		        	// cs.destroy()
 		        },
@@ -108,7 +111,7 @@ define(["ractive","ueditor"], function(Ractive) {
 			btnDestroy.click(function(event) {
 				self.ractiveObj.teardown();
 			});
-		}		
+		}
 	}
 
 	/**
@@ -137,7 +140,7 @@ define(["ractive","ueditor"], function(Ractive) {
 			console.log(this.get('value'));
 			console.log(this.get('initdata'));
 		},
-		oncomplete : function(){
+		onrender : function(){
 			var self = this;
 			var domTitle = $(self.find('.title'));
 			domTitle.text(self.get('initdata'));
@@ -177,6 +180,99 @@ define(["ractive","ueditor"], function(Ractive) {
 		}
 	})
 
+	/**
+	 * Component : TextInput 
+	 */
+	var TextInputComponent = Ractive.extend({
+		template : `
+			<input type="text" class="input-text" value={{value}}>
+			<span class="input-maxlength">字数</span>
+		`,
+		css : `
+			.input-text{width:100%; border:1px solid #000; padding:5px;}
+			.input-maxlength{display:inline-block; font-size:10px; position:absolute;right:0; top:7px;}
+		`,
+		data:{},
+		oninit : function(){
+			// console.log(this.get('value'));
+		},
+		domInputText : null,
+		onrender : function(){
+			var self = this;
+			var maxlength = self.get('maxlength');
+			if(maxlength){
+				self.domInputText = $(self.find('.input-text'));
+				var domTips = $(self.find('.input-maxlength'));
+				//
+				self.initDomTips(self.get('value'), domTips, maxlength);
+				//
+				self.domInputText.focus(function(){
+			        self.checkInputLenghtFun(self.domInputText, maxlength, domTips);
+			    });
+			}
+		},
+		onteardown : function(){
+			var self = this;
+			if(self.domInputText != null){
+				self.domInputText.unbind("focus");
+			}
+		},
+
+		/* init : dom-tips */
+		initDomTips : function($initTextVal, $domTips, $maxlength){
+			var self = this;
+			var domTips = $domTips;
+			domTips.text('0/'+$maxlength);
+			//
+			var maxStrLength = $maxlength;
+	        //var tempMaxLenght = maxStrLength;
+	        var inputStr = $initTextVal;
+	        var currInputLength = self.inputCountLengthFun(inputStr);
+	        var leavlNum = maxStrLength - currInputLength;
+	        //改变已经输入字符
+	        var currHmtlStr = Math.floor(currInputLength)+"/"+maxStrLength;
+	        domTips.html(currHmtlStr);
+	        //
+	        if(currInputLength>maxStrLength){
+	           	var overHtmlStr = "<label style='color: #f00;'>"+leavlNum+"</label>/"+maxStrLength;
+	            domTips.html(overHtmlStr);
+	        }
+		},
+		/* 判断输入框字符串长度 string length */
+	    inputCountLengthFun : function (str) {
+	        var r = 0;
+	        for (var i = 0; i < str.length; i++) {
+	            var c = str.charCodeAt(i);
+	            if ( (c >= 0x0 && c < 0x81) || (c == 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4)) {
+	                r += 0.5;
+	            } else {
+	                r += 1;
+	            }
+	        }
+	        return r;
+	    },
+	    /* 在 change 事件里，改变字符串的长度提示 */
+	    checkInputLenghtFun : function ($domInputText, $maxWords, $domTips){
+	    	var self = this;
+	    	var domInputText = $domInputText;
+	        var maxStrLength = $maxWords;
+	        var domTips = $domTips;
+	        //
+	        domInputText.off("input").on("input",function(){
+	            var inputStr = domInputText.val();
+	            var currInputLength = self.inputCountLengthFun(inputStr);
+	            var leavlNum = maxStrLength - currInputLength;
+	            //改变已经输入字符
+	            var currHmtlStr = Math.floor(currInputLength)+"/"+maxStrLength;
+	            domTips.html(currHmtlStr);
+	            //
+	            if(currInputLength>maxStrLength){
+	               	var overHtmlStr = "<label style='color: #f00;'>"+leavlNum+"</label>/"+maxStrLength;
+	                domTips.html(overHtmlStr);
+	            }
+	        });
+	    }
+	})
 
 	/**
 	 * Component : Ueditor
@@ -193,7 +289,7 @@ define(["ractive","ueditor"], function(Ractive) {
 			var self = this;
 			// console.log(self.get('maxlength'));
 		},
-		oncomplete:function(){
+		onrender:function(){
 			var self = this;
 			domTextArea = $(self.find('.input-textarea'));
 			self.ueditorObj = self.newUeditor(domTextArea, self.get('value'), self.get('maxlength'));			
@@ -233,8 +329,7 @@ define(["ractive","ueditor"], function(Ractive) {
 			{
 				console.log('recreate:' + err)
 			}			
-		}
-		
+		}		
 	});
 
 	/**
@@ -254,35 +349,18 @@ define(["ractive","ueditor"], function(Ractive) {
 			.dropdown-menu li.active{background-color: #ff0000;}
 		`,
 		data: {},
-		oninit :function(){
+		domDropdownMenu : null,
+		oninit : function(){
 			var self = this;
 			// console.log(self.get('value'));	        
 		},
-		destroy : function(){
-			console.log('destroy DropdownComponent')
-		},
-		oncomplete:function(){
+		onrender : function(){
 			var self = this;
 	        var domOL = $(self.find('ol'));
-	        var domDropdownMenu = $(self.find('.dropdown-menu'));
+	        self.domDropdownMenu = $(self.find('.dropdown-menu'));
 	        var domMenuLi = domOL.children('li');
 	        var btnToggle = $(self.find('.btn-toggle'));
 	        //
-	        var listener = function() {
-	        	domDropdownMenu.addClass('hide');
-		    	document.removeEventListener('click', listener);
-		    };
-		    //
-		    var toggleList = function(){
-		    	if(domDropdownMenu.hasClass('hide')){  //* case : show domDropdownMenu
-	        		domDropdownMenu.removeClass('hide');
-	        		document.addEventListener('click', listener);
-	        	}else{								   //* case : hide domDropdownMenu	
-	        		domDropdownMenu.addClass('hide');
-	        		document.removeEventListener('click', listener);	        		
-	        	}
-		    }
-		    //
 		    var setItemsActive = function($domActive){
 		    	domMenuLi.each(function(index, el) {
 		    		$(el).removeClass('active');
@@ -291,7 +369,7 @@ define(["ractive","ueditor"], function(Ractive) {
 		    }
 	        //
 	        btnToggle.click(function(event) {
-	        	toggleList();
+	        	self.toggleList();
 	        	event.stopPropagation();
 	        });
 	        //
@@ -309,7 +387,27 @@ define(["ractive","ueditor"], function(Ractive) {
 	        		setItemsActive($(this));
 	        	});
 	        });
-        }
+        },
+        onteardown : function(){
+        	document.removeEventListener('click', self.listener);
+        },
+
+        listener : function($self) {
+        	var self =  $self;
+        	self.domDropdownMenu.addClass('hide');
+	    	document.removeEventListener('click', self.listener);
+	    },
+
+	    toggleList : function(){
+	    	var self = this;
+	    	if(self.domDropdownMenu.hasClass('hide')){  //* case : show domDropdownMenu
+        		self.domDropdownMenu.removeClass('hide');
+        		document.addEventListener('click', self.listener.bind(null, self));
+        	}else{								   //* case : hide domDropdownMenu	
+        		self.domDropdownMenu.addClass('hide');
+        		document.removeEventListener('click', self.listener);	        		
+        	}
+	    }
 	});
 
 	return testcaseComponent;
