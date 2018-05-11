@@ -1,5 +1,4 @@
 ﻿# Learning ractivejs
-Test branch Develop - 1
 
 在过往开发 Web Project 的过程中，发现数据绑定是如此的重要，之前的项目由于没有使用数据绑定，导致后期维护异常的困难，例如：新增一个输入字段，后台不得不做数据兼容；字段没有做对象属性标记，导致阅读异常的困难。鉴于以上如此不堪的开发维护经验，今后项目势必用上数据绑定。
 
@@ -372,7 +371,7 @@ Ractive({
 
 ==注意：isolated== , default true, 默认下使用 componet 的 Ractive instance data 不能 update 其内的 data
 
-```
+```javascript
 //* Create Componet
 var MyComponent = Ractive.extend({
   isolated : false,  //* default true, 如果默认ture, componet 的 Ractive instance data(title) 不能 update 其内的 data(title)
