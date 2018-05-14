@@ -33,13 +33,6 @@ define(["ractive","ueditor"], function(Ractive) {
 		        	"link" : {"type":0, "url":"http://www.qq.com", "blank":true},
 		        	"customdata" : "blue"
 		        },
-		        formatClassName : function($isShow){
-		        	if($isShow){
-		        		return 'open';
-		        	}else{
-		        		return '';
-		        	}
-		        },
 		        onrender:function(){
 		        	var cs = this.findComponent('dropdown'); //* find component by name, return ractive instance
 		        	// cs.destroy()

@@ -12,6 +12,7 @@ RactiveJS 是一款轻量级的前端 MVVM（Model-View-ViewModel） 框架，�
 * [响应事件](#handling-events-响应事件)
 * [自定义组件](#creating-components---创建组件)
 * [构建页面](#create-basci-page---构建页面)
+* [构建页面](#create-shopcar-page---构建购物车)
 
 
 ### 基础知识
@@ -687,3 +688,16 @@ var website = `
 https://yueveron.github.io/learnractivejs/demo/bookstorepage/index.html
 
 ---
+
+### Create shopcar page - 构建购物车
+**Ractive-instance : ProductList** ，功能：
+- 循环及条件语句 : 循环渲染出商品列表，条件定义是否显示商品，商品是否在购物车内
+- click event : 点击商品传递参数（商品 keypath'name , 商品 keypath'data）
+
+**Ractive-instance : Cart** ，功能：
+- 循环及条件语句
+- click event ： 增加、减少商品数量；移除商品。
+- 双向数据绑定：计算总价格
+
+###### Demo : BookStore Web Page
+https://yueveron.github.io/learnractivejs/demo/shopcar/index.html

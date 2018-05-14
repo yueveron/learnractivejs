@@ -257,7 +257,7 @@ page.init();
                 <span class="checkmark"></span>
                 <span class="checktext">添加评论组件</span>
             </label>
-            <div class="collapse {{formatClassName(isShowComment)}}">
+            <div class="collapse {{ isShowComment ? 'open' : '' }}">
                 Comment Content
             </div>
         </div>
