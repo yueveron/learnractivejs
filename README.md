@@ -428,8 +428,8 @@ const ractive = new Ractive({
     components: { MyComponent }
 });
 ```
-##### 自定义组件关键点
-组件内的代码可以将组件实例自定义的属性值(eg:list)，作为组件代码的 self's ractive.keypath，由此实现对组件实例的读(self.get('list'))，或写(self.set('list', setvalue))。
+#### 自定义组件关键点
+组件内的代码可以将标记在“引用组件 template”定义的 keypath'name 作为组件代码的 self's ractive.keypath，由此实现对父层 ractive-instance's 组件的 keypath 进行读(self.get('keypath'name'))，或写(self.set('keypath'name', setvalue))。 请看以下实例：
 
 ###### Example Custom Component
 
@@ -442,7 +442,7 @@ const ractive = new Ractive({
         <p>{{title}}</p>
 
         <div class="row">
-            <!-- 标记组件，同时可以定义属性(eg:value, initdata)，给予组件代码内使用，由此实现对组件实例的读(self.get('value'))，或写(self.set('value', setvalue))。 -->
+            <!-- 引用组件，定义 keypath (eg:name-value, value-initdata)，给予组件代码内使用，由此实现对组件实例的读(self.get('value'))，或写(self.set('value', setvalue))。 -->
             <customComponent value={{customdata}} initdata="Custom Component Demo">
                 <!-- 嵌入组件 {{yield}} 的代码 -->
                 <a class="btn btn-color" value="blue">Blue</a>
