@@ -36,8 +36,8 @@ createRactive : function(){
         template : '#template-baisc',
         //* data就是要放到模板中的数据，是一个json对象，value可以是方法
         data : { greeting: 'Hello', name: 'world'},
-        //oncomplete : 模板渲染完毕执行的回调函数, 如果要动态给模板中的DOM绑定一些动态jQuery事件, 建议写在这里
-        oncomplete:function(){
+        //onrender : 模板渲染完毕执行的回调函数, 如果要动态给模板中的DOM绑定一些动态jQuery事件, 建议写在这里
+        onrender:function(){
         }
     });
 }
@@ -428,7 +428,7 @@ const ractive = new Ractive({
     components: { MyComponent }
 });
 ```
-#####自定义组件关键点
+##### 自定义组件关键点
 组件内的代码可以将组件实例自定义的属性值(eg:list)，作为组件代码的 self's ractive.keypath，由此实现对组件实例的读(self.get('list'))，或写(self.set('list', setvalue))。
 
 ###### Example Custom Component
@@ -554,7 +554,7 @@ https://yueveron.github.io/learnractivejs/demo/component/test-case_component-cus
 
 #### 组件嵌套及事件传递
 
-```javasctipt
+```javascript
 //子层组件
 const Child = Ractive.extend({
   template: '<span></span>',
