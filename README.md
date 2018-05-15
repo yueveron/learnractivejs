@@ -703,7 +703,9 @@ https://yueveron.github.io/learnractivejs/demo/component/test-case_component.htm
 https://github.com/alexserver/ractive-dropdown
 
 ##### Demo : Ractivejs resetTemplate use in component
+
 https://yueveron.github.io/learnractivejs/demo/component/test-case_component-resettemplate.html
+
 ---
 
 ### Create basci page - 构建页面
