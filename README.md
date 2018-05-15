@@ -22,6 +22,59 @@ RactiveJS 使用 Parallel Dom , 可看作是虚拟 DOM.
 #### Mustache
 RactiveJS 使用 Mustache 语法， Mustache（https://mustache.github.io/#demo） Mustache 是一个使用 template 实现页面数据定位的方法。在 RactiveJS 中标记 {{name}} 实现 name 在页面数据定位，同时 {{name}} 被用作 Parallel Dom 监听变化，从而更新真实的 Dom。
 
+##### 条件选择语句
+
+```html
+<script id="template-use-component" type="text/ractive">
+    <div class="section" data-type={{type}}>
+        <p>{{title}}</p>
+
+        <div class="row">
+            <customComponent value={{customdata}} initdata="Custom Component Demo">
+                <!-- 嵌入组件 {{yield}} 的代码 -->
+                <a class="btn btn-color" value="blue">Blue</a>
+                <a class="btn btn-color" value="yellow">Yellow</a>
+                <a class="btn btn-color" value="red">Red</a>
+            </customComponent>
+        </div>
+        <div class="inner-content">
+            <!-- Switch 条件选择语句 -->
+            {{# customdata === 'blue' }}
+                <p>Blue Style :</p>
+                <div class="row"> <textinput value={{inputtext}} maxlength=10></textinput> </div>
+            {{/}}
+
+            {{# customdata === 'yellow' }}
+                <div class="row"> <textinput value={{inputtext}} maxlength=10></textinput> </div>
+                <p>Yellow Style :</p>
+            {{/}}
+
+            {{# customdata === 'red' }}
+                <p>Red Style :</p>
+                <div class="row"> <textinput value={{inputtext}} maxlength=10></textinput> </div>
+                <p>Red Style :</p> 
+            {{/}}
+        </div>
+    </div>
+</script>
+```
+###### Demo : Switch by Button-Select
+https://yueveron.github.io/learnractivejs/demo/component/test-case_component-switch.html
+
+###### Example :: 转义标记
+
+```javascript
+data: { name: '<b>world</b>' }
+
+//* 使用 {{{keypath}}}!
+<p>Hello, {{{name}}}!</p>
+```
+
+###### Mustaches 语法
+https://ractive.js.org/api/#mustaches
+
+---
+
 ###### Demo Basic
 https://yueveron.github.io/learnractivejs/demo/00.demo_helloworld.html
 
@@ -42,16 +95,6 @@ createRactive : function(){
     });
 }
 ```
-
-###### Example :: 转义标记
-
-```
-data: { name: '<b>world</b>' }
-
-//* 使用 {{{keypath}}}!
-<p>Hello, {{{name}}}!</p>
-```
-
 ###### Example :: Get Data ，==注意 clone or pure-data==
 
 ```
