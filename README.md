@@ -596,6 +596,7 @@ var CustomComponent = Ractive.extend({
 https://yueveron.github.io/learnractivejs/demo/component/test-case_component-customdemo.html
 
 #### 组件嵌套及事件传递
+组件嵌套，务必所要嵌入的组件代码已经载入才能被嵌套。
 
 ```javascript
 //子层组件
@@ -628,6 +629,8 @@ instance.on('Child.childevt', function(){
   console.log('Hello World!');
 });
 ```
+
+
 
 #### Ractivejs Component 自带常用方法
 
@@ -683,6 +686,9 @@ onteardown: function() {
 }
 ```
 
+##### resetTemplate
+Resets the template and re-renders the entire instance using the new template.
+
 #### 组件自定义方法
 ractivejs 支持在组件代码内创建任意自定义的方法，并提供在父层实例中调用。
 
@@ -696,6 +702,8 @@ https://yueveron.github.io/learnractivejs/demo/component/test-case_component.htm
 ##### Demo : Ractivejs Pure DropDownMenu
 https://github.com/alexserver/ractive-dropdown
 
+##### Demo : Ractivejs resetTemplate use in component
+https://yueveron.github.io/learnractivejs/demo/component/test-case_component-resettemplate.html
 ---
 
 ### Create basci page - 构建页面
